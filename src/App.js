@@ -1,25 +1,34 @@
-import logo from './logo.svg';
 import './App.css';
+import logo from './img/logo.png'
+import Countries from "./components/Countries/Countries";
+import {useState} from "react";
+import {covidAPI} from "./components/API/api";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const [country, setCountries] = useState([
+        // {ID: 1, Country: 'Ukraine', TotalConfirmed: 10000},
+        // {ID: 2, Country: 'Russia', TotalConfirmed: 1000},
+        // {ID: 3, Country: 'Berlin', TotalConfirmed: 20000},
+        // {ID: 4, Country: 'France', TotalConfirmed: 30000}
+    ])
+
+   const getCountries = () => {
+        return covidAPI.getCountries().then(response => setCountries(response.Countries.map(item => item)))
+   }
+
+
+    return (
+        <div className="App">
+            <header>
+                <img src={logo} alt="logo"/>
+                <h1>Statistics</h1>
+                <input type="text" placeholder={'search'}/>
+            </header>
+            <Countries countries={country}/>
+            <button className='btn btn-success' onClick={() => getCountries()}>Get Info</button>
+        </div>
+    );
 }
 
 export default App;
